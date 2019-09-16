@@ -1,0 +1,1 @@
+java -jar FTP_LOADER.jar config.properties
