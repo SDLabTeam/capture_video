@@ -3,6 +3,7 @@ package com.asem.service;
 import com.asem.pojo.FTPConfig;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -11,6 +12,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 
 public class FTPService {
+  private static final Logger LOGGER = Logger.getLogger(FTPService.class);
   private FTPConfig ftpConfig;
   private String lastUploadedFilePath;
 
@@ -20,6 +22,7 @@ public class FTPService {
 
   public boolean sendFile(Path localFilePath, String remoteDirectoryPath) {
     String remotePath = getRemotePath(remoteDirectoryPath, localFilePath);
+    LOGGER.info("Start uploading file to ftp path " + remotePath);
     FTPClient ftpClient = null;
     try (InputStream inputStream =
         new BufferedInputStream(new FileInputStream(localFilePath.toFile()))) {
@@ -27,10 +30,13 @@ public class FTPService {
       boolean resultFlag = ftpClient.storeFile(remotePath, inputStream);
       if (resultFlag) {
         lastUploadedFilePath = remotePath;
+        LOGGER.info("Uploading file " + remotePath + " finished successfully");
+      } else {
+        LOGGER.info("Uploading file " + remotePath + " finished UNsuccessfully");
       }
       return resultFlag;
     } catch (IOException e) {
-      e.printStackTrace();
+      LOGGER.error("Error has happened: ", e);
       return false;
     } finally {
       try {
@@ -39,7 +45,7 @@ public class FTPService {
           ftpClient.disconnect();
         }
       } catch (IOException e) {
-        e.printStackTrace();
+        LOGGER.error("Error: ", e);
       }
     }
   }

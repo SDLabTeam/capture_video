@@ -1,4 +1,3 @@
 package com.asem.pojo;
 
-public class APIConfig {
-}
+public class APIConfig {}
