@@ -1,5 +1,7 @@
 package com.asem.pojo;
 
+import java.util.Objects;
+
 public class FTPConfig {
   private final String ftpUsername;
   private final String ftpPassword;
@@ -58,5 +60,22 @@ public class FTPConfig {
         + remoteDirectory
         + '\''
         + '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    FTPConfig ftpConfig = (FTPConfig) o;
+    return ftpServerPort == ftpConfig.ftpServerPort &&
+            Objects.equals(ftpUsername, ftpConfig.ftpUsername) &&
+            Objects.equals(ftpPassword, ftpConfig.ftpPassword) &&
+            Objects.equals(ftpServerURL, ftpConfig.ftpServerURL) &&
+            Objects.equals(remoteDirectory, ftpConfig.remoteDirectory);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(ftpUsername, ftpPassword, ftpServerURL, ftpServerPort, remoteDirectory);
   }
 }

@@ -4,6 +4,7 @@ import com.asem.pojo.APIConfig;
 import com.asem.pojo.Config;
 import com.asem.pojo.FTPConfig;
 import com.asem.pojo.LoggingConfig;
+import javafx.util.Pair;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -12,42 +13,59 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-/** Hello world! */
+
 public class App {
   private static final Logger LOGGER = Logger.getLogger(App.class);
   private static final ExecutorService executorService = Executors.newFixedThreadPool(50);
+  private static final String UPLOADED_LOGGING_FILENAME = "uploaded.txt";
+  private static CountDownLatch latch;
 
   public static void main(String[] args) {
+    if (args.length != 1) {
+      showHelp();
+      System.exit(-1);
+    }
     try {
-      List<Config> configs = getConfigs(args[0]);
-      processAll(configs);
+      System.out.println("Starting upload files....");
+      List<Pair<Config, Path>> tasks = getTasks(getConfigs(args[0]));
+      latch = new CountDownLatch(tasks.size());
+      processAllTasksConcurrently(tasks);
       executorService.shutdown();
-      executorService.awaitTermination(10, TimeUnit.MINUTES);
+      System.out.println("Awaiting for uploading all files");
+      latch.await();
       System.out.println("Finished successfully");
     } catch (IOException | InterruptedException e) {
       LOGGER.error("An error occurred: ", e);
     }
   }
 
-  private static void processAll(List<Config> usersConfigs) throws IOException {
-    for (Config config : usersConfigs) {
-      processUser(config);
+  private static List<Pair<Config, Path>> getTasks(List<Config> configs) throws IOException {
+    ArrayList<Pair<Config, Path>> result = new ArrayList<>();
+    for (Config config : configs) {
+      for (Path path : getFilesToUpload(config)) {
+        result.add(new Pair<>(config, path));
+      }
     }
+    return result;
   }
 
-  private static void processUser(Config usersConfig) throws IOException {
-    List<Path> filesToUpload = getFilesToUpload(usersConfig);
-    if (!filesToUpload.isEmpty()) {
-      for (Path f : filesToUpload) {
-        executorService.submit(new FileUploader(usersConfig, f));
-      }
+  private static void showHelp() {
+    System.out.println("Invalid argumets count");
+    System.out.println("Usage");
+    System.out.println("\t <path to user folders>");
+  }
+
+  private static void processAllTasksConcurrently(List<Pair<Config, Path>> tasks) {
+    for (Pair<Config, Path> task : tasks) {
+      executorService.submit(new FileUploader(task.getKey(), task.getValue(), latch));
     }
   }
 
@@ -76,7 +94,9 @@ public class App {
 
       // TODO load api config
       APIConfig apiConfig = new APIConfig();
-      LoggingConfig loggingConfig = new LoggingConfig(config.getProperty("logging.urlLog"));
+      // Logging config
+      LoggingConfig loggingConfig =
+          new LoggingConfig(pathToConfig.getParent().resolve(UPLOADED_LOGGING_FILENAME).toString());
       return new Config(apiConfig, ftpConfig, loggingConfig, toUploadDirectory, uploadedDirectory);
     } catch (IOException e) {
       // this method is used in stream.map, that is why we can not throw checked exception here
