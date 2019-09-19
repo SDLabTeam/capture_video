@@ -1,4 +1,4 @@
-package com.asem.pojo;
+package com.uploader.pojo;
 
 public class LoggingConfig {
   private String logFilePath;

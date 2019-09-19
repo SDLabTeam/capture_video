@@ -1,10 +1,10 @@
-package com.asem;
+package com.uploader;
 
-import com.asem.pojo.APIConfig;
-import com.asem.pojo.Config;
-import com.asem.pojo.FTPConfig;
-import com.asem.service.FTPService;
-import com.asem.service.LoggingService;
+import com.uploader.pojo.APIConfig;
+import com.uploader.pojo.Config;
+import com.uploader.pojo.FTPConfig;
+import com.uploader.service.FTPService;
+import com.uploader.service.LoggerService;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class FileUploader implements Runnable {
   private Path fileToBeUploaded;
   private Path localUploadedDirectory;
   private FTPService ftpService;
-  private LoggingService loggingService;
+  private LoggerService loggerService;
   private CountDownLatch latch;
 
   public FileUploader(Config config, Path fileToBeUploaded, CountDownLatch latch) {
@@ -28,7 +28,7 @@ public class FileUploader implements Runnable {
     this.fileToBeUploaded = fileToBeUploaded;
     this.localUploadedDirectory = config.getUploadedDirectoryPath();
     this.ftpService = new FTPService(ftpConfig);
-    this.loggingService = new LoggingService(config.getLoggingConfig().getLogFilePath());
+    this.loggerService = new LoggerService(config.getLoggingConfig().getLogFilePath());
     this.latch = latch;
   }
 
@@ -69,6 +69,6 @@ public class FileUploader implements Runnable {
   }
 
   private void logInfo() {
-    loggingService.addInfo(buildFileUrl(ftpService.getLastUploadedFilePath()));
+    loggerService.addInfo(buildFileUrl(ftpService.getLastUploadedFilePath()));
   }
 }

@@ -1,4 +1,4 @@
-package com.asem;
+package com.uploader;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -13,7 +13,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 public class FTPClientTest {
@@ -24,7 +23,7 @@ public class FTPClientTest {
   public void prepareFtpClient() throws IOException {
     // preparing ftp client
     ftpClient.connect("localhost", 21);
-    ftpClient.login("asem", "123456789");
+    ftpClient.login("uploader", "123456789");
     ftpClient.enterLocalPassiveMode();
     ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
   }

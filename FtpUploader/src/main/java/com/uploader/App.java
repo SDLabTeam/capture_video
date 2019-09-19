@@ -1,9 +1,9 @@
-package com.asem;
+package com.uploader;
 
-import com.asem.pojo.APIConfig;
-import com.asem.pojo.Config;
-import com.asem.pojo.FTPConfig;
-import com.asem.pojo.LoggingConfig;
+import com.uploader.pojo.APIConfig;
+import com.uploader.pojo.Config;
+import com.uploader.pojo.FTPConfig;
+import com.uploader.pojo.LoggingConfig;
 import javafx.util.Pair;
 import org.apache.log4j.Logger;
 

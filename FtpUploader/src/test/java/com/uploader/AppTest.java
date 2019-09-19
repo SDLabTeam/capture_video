@@ -1,4 +1,4 @@
-package com.asem;
+package com.uploader;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

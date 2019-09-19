@@ -1,17 +1,16 @@
-package com.asem.service;
+package com.uploader.service;
 
 import org.apache.log4j.Logger;
 
 import java.io.*;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class LoggingService {
-  private static final Logger LOGGER = Logger.getLogger(LoggingService.class);
+public class LoggerService {
+  private static final Logger LOGGER = Logger.getLogger(LoggerService.class);
   private Writer out;
 
-  public LoggingService(String pathToLogFile) {
+  public LoggerService(String pathToLogFile) {
     File outFile = new File(pathToLogFile);
     try {
       outFile.createNewFile();

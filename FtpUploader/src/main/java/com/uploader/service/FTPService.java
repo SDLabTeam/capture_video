@@ -1,6 +1,6 @@
-package com.asem.service;
+package com.uploader.service;
 
-import com.asem.pojo.FTPConfig;
+import com.uploader.pojo.FTPConfig;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;

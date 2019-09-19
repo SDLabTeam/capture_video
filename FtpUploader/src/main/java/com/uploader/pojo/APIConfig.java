@@ -1,3 +1,3 @@
-package com.asem.pojo;
+package com.uploader.pojo;
 
 public class APIConfig {}

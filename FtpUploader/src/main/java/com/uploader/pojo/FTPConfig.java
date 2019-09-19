@@ -1,4 +1,4 @@
-package com.asem.pojo;
+package com.uploader.pojo;
 
 import java.util.Objects;
 
