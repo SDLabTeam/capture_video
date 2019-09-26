@@ -1,4 +1,3 @@
-#! /usr/bin/bash
 outputPath=$2
 dateTime=`date +'%d_%m_%y_%H_%M'`
 filename="$1_${dateTime}.wmv"

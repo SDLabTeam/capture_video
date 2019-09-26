@@ -15,6 +15,9 @@ You need to specify path to "toUpload" folder as a second parameter of `start.sh
 * <username>_capture_screen_no_convertation.sh
 
 
+### Downloading bash
+Download files https://drive.google.com/open?id=1UYhGcm9sZQiZn1pTpS5QFY6NhVsn_Dpa to the directory with `start.sh` and other scripts
+
 ## Configuring task scheduler
 1. Open Task Scheduler
 1. Click 'Create Task'
