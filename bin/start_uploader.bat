@@ -1,0 +1,1 @@
+start "%JAVA_HOME%\bin\java.exe -jar" "%FTPLoader_PATH%\FTPloader.jar" "%FTP_UPLOADER_USERS_DIRECTORY%"
