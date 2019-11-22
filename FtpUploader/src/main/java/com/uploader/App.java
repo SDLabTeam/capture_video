@@ -4,7 +4,7 @@ import com.uploader.pojo.APIConfig;
 import com.uploader.pojo.Config;
 import com.uploader.pojo.FTPConfig;
 import com.uploader.pojo.LoggingConfig;
-import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -51,7 +51,7 @@ public class App {
     ArrayList<Pair<Config, Path>> result = new ArrayList<>();
     for (Config config : configs) {
       for (Path path : getFilesToUpload(config)) {
-        result.add(new Pair<>(config, path));
+        result.add(Pair.of(config, path));
       }
     }
     return result;
