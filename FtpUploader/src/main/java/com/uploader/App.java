@@ -1,9 +1,11 @@
 package com.uploader;
 
-import com.uploader.pojo.APIConfig;
-import com.uploader.pojo.Config;
-import com.uploader.pojo.FTPConfig;
-import com.uploader.pojo.LoggingConfig;
+import com.uploader.config.APIConfig;
+import com.uploader.config.Config;
+import com.uploader.config.EmailConfig;
+import com.uploader.config.FTPConfig;
+import com.uploader.config.LoggingConfig;
+import com.uploader.time.DateTime;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
@@ -88,16 +90,26 @@ public class App {
       String ftpServerURL = config.getProperty("ftp.serverURL");
       int ftpServerPort = Integer.parseInt(config.getProperty("ftp.server.port"));
       String ftpDestinationDirectory = config.getProperty("ftp.destinationDirectory");
+      if (ftpDestinationDirectory.length() > 1) {
+        ftpDestinationDirectory = "/" + DateTime.getCurrentFolder(DateTime.getCurrentTime());
+      }
       FTPConfig ftpConfig =
           new FTPConfig(
               ftpUsername, ftpPassword, ftpServerURL, ftpServerPort, ftpDestinationDirectory);
+
+      String username = config.getProperty("email.username");
+      String password = config.getProperty("email.password");
+      String fromEmail = config.getProperty("email.fromEmail");
+      String toEmail = config.getProperty("email.toEmail");
+
+      EmailConfig emailConfig = new EmailConfig(username, password, fromEmail, toEmail);
 
       // TODO load api config
       APIConfig apiConfig = new APIConfig();
       // Logging config
       LoggingConfig loggingConfig =
           new LoggingConfig(pathToConfig.getParent().resolve(UPLOADED_LOGGING_FILENAME).toString());
-      return new Config(apiConfig, ftpConfig, loggingConfig, toUploadDirectory, uploadedDirectory);
+      return new Config(apiConfig, emailConfig, ftpConfig, loggingConfig, toUploadDirectory, uploadedDirectory);
     } catch (IOException e) {
       // this method is used in stream.map, that is why we can not throw checked exception here
       throw new RuntimeException(e);

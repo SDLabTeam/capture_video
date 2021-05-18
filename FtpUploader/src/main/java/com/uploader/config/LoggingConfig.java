@@ -1,4 +1,4 @@
-package com.uploader.pojo;
+package com.uploader.config;
 
 public class LoggingConfig {
   private String logFilePath;

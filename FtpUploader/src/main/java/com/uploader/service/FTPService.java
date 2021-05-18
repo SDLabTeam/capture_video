@@ -1,6 +1,6 @@
 package com.uploader.service;
 
-import com.uploader.pojo.FTPConfig;
+import com.uploader.config.FTPConfig;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
